@@ -1,0 +1,202 @@
+---
+import { site, navegacion, cta } from '../config/site';
+
+const creditos = [
+  { que: 'Florencia', autor: 'hozinja', lic: 'CC BY 2.0', href: 'https://commons.wikimedia.org/wiki/File:Sunset_in_Florence_from_the_Piazza_Michelangelo.jpg' },
+  { que: 'Nueva York', autor: 'Diliff', lic: 'CC BY 2.5', href: 'https://commons.wikimedia.org/wiki/File:Lower_Manhattan_from_Staten_Island_Ferry_Jan_2006.jpg' },
+  { que: 'Toronto', autor: 'Andrew Rivett', lic: 'CC BY 2.0', href: 'https://commons.wikimedia.org/wiki/File:Skyline_Sunset_Toronto_2010.jpg' },
+  { que: 'Sídney', autor: 'Adam.J.W.C.', lic: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Sydney_harbour_bridge_new_south_wales.jpg' },
+  { que: 'Madrid', autor: 'Gerda Arendt', lic: 'CC0', href: 'https://commons.wikimedia.org/wiki/File:Sunset,_Gran_Via,_Madrid.jpg' },
+  { que: 'Dubái', autor: 'Gfilip', lic: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Dubai_Marina_by_day.jpg' },
+  { que: 'pasaporte', autor: 'Jon Rawlinson', lic: 'CC BY 2.0', href: 'https://commons.wikimedia.org/wiki/File:Passport_stamps_18-19.jpg' },
+];
+const anio = new Date().getFullYear();
+---
+
+<footer class="pie">
+  <div class="wrap pie-grid">
+    <div class="pie-marca">
+      <img src="/logo-emigrahoy.svg" alt="EmigraHoy" width="915" height="871" loading="lazy" class="pie-logo" />
+      <p>Ciudadanía italiana, visas y viajes. Sede física en {site.sede}, atención presencial y virtual.</p>
+      <a href={cta.href} class="btn btn-sello pie-cta">{cta.texto}</a>
+    </div>
+
+    <div class="pie-col">
+      <h2 class="pie-titulo">Contacto</h2>
+      <ul role="list">
+        <li><a href={site.whatsapp.href} class="pie-enlace" target="_blank" rel="noopener">WhatsApp {site.whatsapp.visible}</a></li>
+        <li><a href={`mailto:${site.correo}`} class="pie-enlace">{site.correo}</a></li>
+        <li><a href={site.resenas.href} class="pie-enlace" target="_blank" rel="noopener">{site.sede} en Google Maps</a></li>
+      </ul>
+    </div>
+
+    <div class="pie-col">
+      <h2 class="pie-titulo">Redes</h2>
+      <ul role="list">
+        {
+          site.redes.map((r) => (
+            <li>
+              <a href={r.href} class="pie-enlace" target="_blank" rel="noopener">
+                {r.nombre}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="pie-col">
+      <h2 class="pie-titulo">En esta página</h2>
+      <ul role="list">
+        {
+          navegacion.map((n) => (
+            <li>
+              <a href={n.href} class="pie-enlace">
+                {n.texto}
+              </a>
+            </li>
+          ))
+        }
+        <li><a href="#agenda" class="pie-enlace">Agenda</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <p class="pie-mrz" aria-hidden="true">
+      <span class="mrz">P&lt;COLEMIGRAHOY&lt;&lt;ENVIGADO&lt;&lt;ANTIOQUIA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>
+    </p>
+    <div class="pie-legal">
+      <p>© {anio} EmigraHoy · {site.sede}, {site.pais}</p>
+      <p class="pie-creditos-intro">Fotos: calle italiana y Toscana, archivo de EmigraHoy. Las demás vienen de Wikimedia Commons, con ajuste de color:</p>
+      <ul class="pie-creditos" role="list">
+        {
+          creditos.map((c) => (
+            <li>
+              <a href={c.href} target="_blank" rel="noopener">
+                {c.que}: {c.autor} ({c.lic})
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    padding-block: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+    border-top: 1px solid var(--color-linea);
+  }
+  .pie-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .pie-logo {
+    width: 96px;
+    height: auto;
+  }
+  .pie-marca p {
+    margin: 1rem 0 1.25rem;
+    max-width: 34ch;
+    color: var(--color-gris);
+  }
+  .pie-titulo {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  .pie-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pie-enlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+    color: var(--color-tinta);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background-image: linear-gradient(var(--color-rojo), var(--color-rojo));
+    background-size: 0% 1.5px;
+    background-position: 0 calc(50% + 0.8em);
+    background-repeat: no-repeat;
+    transition: background-size var(--dur-respuesta) var(--ease-salida);
+  }
+  .pie-enlace:hover {
+    background-size: 100% 1.5px;
+  }
+  .pie-mrz {
+    margin: 3rem 0 1rem;
+    font-size: 0.8rem;
+    color: var(--color-gris);
+    border-top: 1px solid var(--color-linea);
+    padding-top: 1rem;
+  }
+  /* la franja se corta donde se acabe el ancho: el relleno «<» se desvanece en vez de partirse a mitad de glifo */
+  .pie-mrz .mrz {
+    display: block;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 4rem), transparent);
+  }
+  @media (max-width: 479px) {
+    /* en teléfono el texto llega completo hasta ANTIOQUIA y solo se desvanece el relleno */
+    .pie-mrz {
+      font-size: 0.7rem;
+    }
+    .pie-mrz .mrz {
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+    }
+  }
+  @media (min-width: 1024px) {
+    /* en escritorio la franja cabe entera: sin desvanecido */
+    .pie-mrz .mrz {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+  .pie-legal {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-gris);
+  }
+  .pie-legal p {
+    margin: 0;
+  }
+  .pie-creditos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.25rem;
+  }
+  .pie-creditos a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 1023px) {
+    .pie {
+      padding-bottom: calc(1.5rem + 76px);
+    }
+  }
+  @media (min-width: 768px) {
+    .pie-grid {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

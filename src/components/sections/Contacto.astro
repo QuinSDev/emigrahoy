@@ -1,0 +1,788 @@
+---
+import Sello from '../Sello.astro';
+import { site, cta } from '../../config/site';
+import { opcionesTramite, opcionesDestino } from '../../data/rutas';
+---
+
+<section id="agenda" class="contacto" data-tono="noche" aria-labelledby="agenda-titulo">
+  <div class="contacto-tinta" data-contacto-tinta aria-hidden="true"></div>
+  <div class="wrap contacto-grid">
+    <div class="contacto-info">
+      <h2 id="agenda-titulo">Agenda tu asesoría, presencial o virtual</h2>
+      <p class="contacto-intro">
+        Déjanos tus datos y te escribimos para confirmar día y hora. Si prefieres hablar ya, escríbenos por WhatsApp.
+      </p>
+
+      <div class="pase" data-pase aria-hidden="true">
+        <div class="pase-cuerpo">
+          <p class="pase-rotulo">Pase de asesoría · EmigraHoy</p>
+          <div class="pase-campos">
+            <div class="pase-campo pase-ancho"><span>Nombre</span><strong data-pase-nombre>Tu nombre</strong></div>
+            <div class="pase-campo"><span>Trámite</span><strong data-pase-tramite>Por elegir</strong></div>
+            <div class="pase-campo"><span>Destino</span><strong data-pase-destino>Por elegir</strong></div>
+            <div class="pase-campo"><span>Modalidad</span><strong data-pase-modalidad>Por elegir</strong></div>
+            <div class="pase-campo"><span>Sede</span><strong>Envigado</strong></div>
+          </div>
+        </div>
+        <div class="pase-talon">
+          <span class="pase-talon-texto">EH! · COL</span>
+        </div>
+      </div>
+
+      <ul class="contacto-datos" role="list">
+        <li>
+          <span>WhatsApp</span>
+          <a href={site.whatsapp.href} class="enlace" target="_blank" rel="noopener">{site.whatsapp.visible}</a>
+        </li>
+        <li>
+          <span>Correo</span>
+          <a href={`mailto:${site.correo}`} class="enlace">{site.correo}</a>
+        </li>
+        <li>
+          <span>Sede</span>
+          <a href={site.resenas.href} class="enlace" target="_blank" rel="noopener">{site.sede}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="contacto-papel" data-contacto-papel data-tono="papel">
+      <form class="form" data-form novalidate aria-describedby="form-nota">
+        <p id="form-nota" class="form-nota">Los campos con * son obligatorios.</p>
+
+        <div class="campo" data-campo="nombre">
+          <label for="f-nombre">Nombre y apellido *</label>
+          <input id="f-nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="e-nombre" />
+          <p id="e-nombre" class="campo-error" data-error></p>
+        </div>
+
+        <div class="form-fila">
+          <div class="campo" data-campo="celular">
+            <label for="f-celular">Celular con WhatsApp *</label>
+            <input
+              id="f-celular"
+              name="celular"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="300 123 4567"
+              required
+              aria-describedby="e-celular"
+            />
+            <p id="e-celular" class="campo-error" data-error></p>
+          </div>
+          <div class="campo" data-campo="correo">
+            <label for="f-correo">Correo *</label>
+            <input id="f-correo" name="correo" type="email" autocomplete="email" required aria-describedby="e-correo" />
+            <p id="e-correo" class="campo-error" data-error></p>
+          </div>
+        </div>
+
+        <div class="form-fila">
+          <div class="campo" data-campo="tramite">
+            <label for="f-tramite">Trámite *</label>
+            <select id="f-tramite" name="tramite" required aria-describedby="e-tramite">
+              <option value="">Elige una opción</option>
+              {opcionesTramite.map((o) => <option value={o}>{o}</option>)}
+              <option value="Aún no lo sé">Aún no lo sé</option>
+            </select>
+            <p id="e-tramite" class="campo-error" data-error></p>
+          </div>
+          <div class="campo" data-campo="destino">
+            <label for="f-destino">Destino</label>
+            <select id="f-destino" name="destino">
+              <option value="">Elige una opción</option>
+              {opcionesDestino.map((o) => <option value={o}>{o}</option>)}
+            </select>
+            <p class="campo-error" data-error></p>
+          </div>
+        </div>
+
+        <fieldset class="campo campo-radios" data-campo="modalidad" aria-describedby="e-modalidad">
+          <legend>¿Cómo prefieres la asesoría? *</legend>
+          <div class="radios">
+            <label class="radio"><input type="radio" name="modalidad" value="Presencial en Envigado" required /><span
+                >Presencial en Envigado</span
+              ></label
+            >
+            <label class="radio"><input type="radio" name="modalidad" value="Virtual" /><span>Virtual, por videollamada</span></label>
+          </div>
+          <p id="e-modalidad" class="campo-error" data-error></p>
+        </fieldset>
+
+        <div class="campo" data-campo="mensaje">
+          <label for="f-mensaje">Cuéntanos tu caso (opcional)</label>
+          <textarea
+            id="f-mensaje"
+            name="mensaje"
+            rows="3"
+            placeholder="Por ejemplo: mi bisabuelo nació en Italia y tengo algunas actas."></textarea>
+          <p class="campo-error" data-error></p>
+        </div>
+
+        <div class="campo campo-check" data-campo="acepto">
+          <label class="check">
+            <input type="checkbox" name="acepto" required aria-describedby="e-acepto" />
+            <span>Acepto que EmigraHoy use estos datos solo para contactarme sobre mi trámite. *</span>
+          </label>
+          <p id="e-acepto" class="campo-error" data-error></p>
+        </div>
+
+        <input type="text" name="_honey" class="trampa" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="form-envio">
+          <button type="submit" class="btn btn-sello form-boton" data-form-boton>
+            <span data-form-boton-texto>{cta.texto}</span>
+          </button>
+          <p class="form-alerta" role="alert" data-form-alerta hidden></p>
+        </div>
+      </form>
+
+      <div class="confirmacion" data-confirmacion hidden tabindex="-1" aria-labelledby="confirmacion-titulo">
+        <Sello
+          id="recibido"
+          anillo="EMIGRAHOY · SOLICITUD RECIBIDA · ENVIGADO · "
+          centro={['RECIBIDO']}
+          class="confirmacion-sello"
+          giro={-10}
+          data-confirmacion-sello
+        />
+        <h3 id="confirmacion-titulo" data-confirmacion-titulo>Recibimos tu solicitud</h3>
+        <p data-confirmacion-texto>Te escribimos por WhatsApp para confirmar día y hora de tu asesoría.</p>
+        <div class="confirmacion-acciones">
+          <a href={site.whatsapp.href} class="btn btn-linea" target="_blank" rel="noopener" data-confirmacion-wa
+            >Escríbenos por WhatsApp</a
+          >
+          <button type="button" class="enlace confirmacion-otra" data-form-otra>Enviar otra solicitud</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacto {
+    position: relative;
+    background: var(--color-noche);
+    color: var(--color-papel);
+    padding-block: var(--sec-y);
+    overflow: hidden;
+  }
+  .contacto-tinta {
+    position: absolute;
+    inset: 0;
+    background: var(--color-noche);
+  }
+  .contacto-grid {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+  }
+  .contacto-info h2 {
+    margin: 0;
+    font-size: clamp(2.3rem, 4.6vw, 4rem);
+    max-width: 13ch;
+  }
+  .contacto-intro {
+    margin: 1.25rem 0 0;
+    color: var(--color-niebla);
+    max-width: 40ch;
+    font-size: 1.1rem;
+  }
+
+  /* El pase: resume en vivo lo que llenas */
+  .pase {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-top: 2rem;
+    max-width: 460px;
+    color: var(--color-tinta);
+    filter: drop-shadow(0 22px 30px rgb(0 0 0 / 0.25));
+  }
+  .pase-cuerpo,
+  .pase-talon {
+    background: var(--color-folio);
+  }
+  .pase-cuerpo {
+    padding: 1.1rem 1.25rem 1.25rem;
+    border-radius: var(--r-papel) 0 0 var(--r-papel);
+    -webkit-mask: radial-gradient(circle 9px at 100% 0, transparent 98%, #000) top right / 100% 51% no-repeat,
+      radial-gradient(circle 9px at 100% 100%, transparent 98%, #000) bottom right / 100% 51% no-repeat;
+    mask: radial-gradient(circle 9px at 100% 0, transparent 98%, #000) top right / 100% 51% no-repeat,
+      radial-gradient(circle 9px at 100% 100%, transparent 98%, #000) bottom right / 100% 51% no-repeat;
+  }
+  .pase-talon {
+    width: 64px;
+    border-left: 2px dashed var(--color-linea);
+    border-radius: 0 var(--r-papel) var(--r-papel) 0;
+    display: grid;
+    place-items: center;
+    -webkit-mask: radial-gradient(circle 9px at 0 0, transparent 98%, #000) top left / 100% 51% no-repeat,
+      radial-gradient(circle 9px at 0 100%, transparent 98%, #000) bottom left / 100% 51% no-repeat;
+    mask: radial-gradient(circle 9px at 0 0, transparent 98%, #000) top left / 100% 51% no-repeat,
+      radial-gradient(circle 9px at 0 100%, transparent 98%, #000) bottom left / 100% 51% no-repeat;
+  }
+  .pase-talon-texto {
+    writing-mode: vertical-rl;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--color-rojo-hondo);
+  }
+  .pase-rotulo {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-gris);
+  }
+  .pase-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
+  }
+  .pase-ancho {
+    grid-column: 1 / -1;
+  }
+  .pase-campo {
+    display: grid;
+    min-width: 0;
+  }
+  .pase-campo span {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-gris);
+  }
+  .pase-campo strong {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  .pase-ancho strong {
+    font-size: 1.5rem;
+  }
+
+  .contacto-datos {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+  }
+  .contacto-datos li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    align-items: center;
+    border-top: 1px solid var(--color-linea-noche);
+  }
+  .contacto-datos span {
+    color: var(--color-niebla);
+    font-size: 0.95rem;
+  }
+  .contacto-datos .enlace {
+    color: var(--color-papel);
+    justify-self: start;
+    overflow-wrap: anywhere;
+  }
+
+  /* El papel del formulario */
+  .contacto-papel {
+    position: relative;
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    border-radius: var(--r-papel);
+    padding: 1.5rem 1.25rem 1.75rem;
+    box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.6);
+  }
+  .form {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .form-nota {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-gris);
+  }
+  .form-fila {
+    display: grid;
+    gap: 1.1rem;
+  }
+  .campo {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+  .campo label,
+  .campo legend {
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+  .campo input:not([type='radio']):not([type='checkbox']),
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    min-height: 50px;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--color-borde-campo);
+    border-radius: var(--r-control);
+    background: var(--color-campo);
+    color: var(--color-tinta);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color var(--dur-respuesta) var(--ease-salida),
+      box-shadow var(--dur-respuesta) var(--ease-salida);
+  }
+  .campo textarea {
+    resize: vertical;
+    min-height: 96px;
+  }
+  .campo input::placeholder,
+  .campo textarea::placeholder {
+    color: var(--color-placeholder);
+  }
+  .campo input:hover,
+  .campo select:hover,
+  .campo textarea:hover {
+    border-color: var(--color-tinta);
+  }
+  .campo input:focus-visible,
+  .campo select:focus-visible,
+  .campo textarea:focus-visible {
+    outline: none;
+    border-color: var(--color-verde-texto);
+    box-shadow: 0 0 0 3px rgb(66 143 76 / 0.35);
+  }
+  .campo [aria-invalid='true'] {
+    border-color: var(--color-rojo-hondo) !important;
+    border-width: 2px !important;
+  }
+  .campo.valido input,
+  .campo.valido select {
+    border-color: var(--color-verde-texto);
+  }
+  .campo-error {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--color-rojo-hondo);
+    font-weight: 550;
+  }
+  .campo-error:empty {
+    display: none;
+  }
+  .campo-radios {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .campo-radios legend {
+    padding: 0;
+    margin-bottom: 0.35rem;
+  }
+  .radios {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .radio,
+  .check {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 48px;
+    cursor: pointer;
+  }
+  .radio {
+    padding: 0.4rem 0.9rem;
+    border: 1.5px solid var(--color-borde-campo);
+    border-radius: var(--r-control);
+    background: var(--color-campo);
+    transition: border-color var(--dur-respuesta) var(--ease-salida);
+  }
+  .radio:hover {
+    border-color: var(--color-tinta);
+  }
+  .radio:has(input:checked) {
+    border-color: var(--color-verde-texto);
+    box-shadow: inset 0 0 0 1px var(--color-verde-texto);
+  }
+  .radio input,
+  .check input {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    flex: none;
+    accent-color: var(--color-verde-texto);
+  }
+  .check {
+    align-items: flex-start;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .check input {
+    margin-top: 0.1rem;
+  }
+  .trampa {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .form-envio {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+  .form-boton {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.05rem;
+    min-height: 56px;
+  }
+  .form-boton[aria-disabled='true'] {
+    opacity: 0.75;
+    cursor: progress;
+  }
+  .form-alerta {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid var(--color-rojo-hondo);
+    border-radius: var(--r-control);
+    background: var(--color-error-fondo);
+    color: var(--color-tinta);
+    font-size: 0.95rem;
+  }
+  /* :global porque el enlace lo crea el script y no lleva el atributo de alcance de Astro */
+  .form-alerta :global(a) {
+    color: var(--color-rojo-hondo);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.2em;
+  }
+
+  .confirmacion {
+    position: relative;
+    padding: 1rem 0 0.5rem;
+    min-height: 320px;
+  }
+  .confirmacion:focus {
+    outline: none;
+  }
+  .confirmacion-sello {
+    width: 150px;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .confirmacion h3 {
+    margin: 0;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+  }
+  .confirmacion p {
+    margin: 0.75rem 0 0;
+    max-width: 40ch;
+  }
+  .confirmacion-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .confirmacion-otra {
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: var(--color-verde-texto);
+    cursor: pointer;
+    padding: 0;
+  }
+
+  @media (min-width: 640px) {
+    .form-fila {
+      grid-template-columns: 1fr 1fr;
+    }
+    .radios {
+      grid-template-columns: 1fr 1fr;
+    }
+    .contacto-papel {
+      padding: 2.25rem 2.25rem 2.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .contacto-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(2.5rem, 6vw, 6rem);
+      align-items: start;
+    }
+    .contacto-info {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+    .contacto-papel {
+      margin-top: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { animate, inView, stagger } from 'motion';
+  import { conMovimiento, easeSalida, movimientoReducido, sellar, tiempo } from '../../scripts/anim';
+  import { site } from '../../config/site';
+
+  const seccion = document.getElementById('agenda')!;
+  const form = seccion.querySelector<HTMLFormElement>('[data-form]')!;
+  const boton = form.querySelector<HTMLButtonElement>('[data-form-boton]')!;
+  const botonTexto = form.querySelector<HTMLElement>('[data-form-boton-texto]')!;
+  const alerta = form.querySelector<HTMLElement>('[data-form-alerta]')!;
+  const confirmacion = seccion.querySelector<HTMLElement>('[data-confirmacion]')!;
+  const textoOriginal = botonTexto.textContent!;
+
+  // ---------- Reglas de validación: dicen qué pasó y cómo corregirlo ----------
+  type Regla = (v: string, el: HTMLElement) => string;
+  const digitos = (v: string) => v.replace(/\D/g, '');
+  const reglas: Record<string, Regla> = {
+    nombre: (v) => {
+      const t = v.trim();
+      if (!t) return 'Escribe tu nombre y apellido para saber cómo llamarte.';
+      if (t.length < 3 || !/[a-záéíóúñü]/i.test(t)) return 'Tu nombre parece incompleto. Escribe nombre y apellido.';
+      return '';
+    },
+    celular: (v) => {
+      const d = digitos(v);
+      if (!v.trim()) return 'Escribe un celular con WhatsApp, por ejemplo 300 123 4567.';
+      if (/[a-z]/i.test(v)) return 'El número tiene letras. Escribe solo números, espacios o el signo +.';
+      if (d.length < 10) return `El número tiene ${d.length} dígitos y le faltan. Un celular de Colombia tiene 10, como 300 123 4567.`;
+      if (d.length > 15) return 'El número es demasiado largo. Revisa que no esté repetido.';
+      return '';
+    },
+    correo: (v) => {
+      const t = v.trim();
+      if (!t) return 'Escribe tu correo para enviarte la información de tu trámite.';
+      if (!t.includes('@')) return 'Al correo le falta la @. Debe verse como nombre@gmail.com.';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(t)) return 'Al correo le falta el dominio después de la @, como gmail.com.';
+      return '';
+    },
+    tramite: (v) => (v ? '' : 'Elige el trámite que te interesa. Si no estás seguro, elige «Aún no lo sé».'),
+    modalidad: () =>
+      form.querySelector<HTMLInputElement>('input[name="modalidad"]:checked') ? '' : 'Elige si prefieres la asesoría presencial o virtual.',
+    acepto: () =>
+      form.querySelector<HTMLInputElement>('input[name="acepto"]')!.checked ? '' : 'Marca la casilla para que podamos contactarte.',
+  };
+
+  const tocados = new Set<string>();
+
+  function validar(nombre: string, mostrar = true): boolean {
+    const campo = form.querySelector<HTMLElement>(`[data-campo="${nombre}"]`)!;
+    const control = campo.querySelector<HTMLInputElement>('input, select, textarea')!;
+    const regla = reglas[nombre];
+    if (!regla) return true;
+    const msg = regla(control.value, campo);
+    if (mostrar) {
+      const error = campo.querySelector<HTMLElement>('[data-error]')!;
+      error.textContent = msg;
+      const controles = campo.querySelectorAll<HTMLElement>('input, select, textarea');
+      controles.forEach((c) => c.setAttribute('aria-invalid', msg ? 'true' : 'false'));
+      campo.classList.toggle('valido', !msg && nombre !== 'modalidad' && nombre !== 'acepto');
+    }
+    return !msg;
+  }
+
+  Object.keys(reglas).forEach((nombre) => {
+    const campo = form.querySelector<HTMLElement>(`[data-campo="${nombre}"]`)!;
+    campo.querySelectorAll<HTMLElement>('input, select, textarea').forEach((c) => {
+      c.addEventListener('blur', () => {
+        if ((c as HTMLInputElement).value || tocados.has(nombre)) {
+          tocados.add(nombre);
+          validar(nombre);
+        }
+      });
+      c.addEventListener('input', () => tocados.has(nombre) && validar(nombre));
+      c.addEventListener('change', () => {
+        if (c instanceof HTMLSelectElement || (c as HTMLInputElement).type === 'radio' || (c as HTMLInputElement).type === 'checkbox') {
+          tocados.add(nombre);
+          validar(nombre);
+        }
+      });
+    });
+  });
+
+  // ---------- El pase se llena mientras escribes ----------
+  const pase = {
+    nombre: seccion.querySelector<HTMLElement>('[data-pase-nombre]')!,
+    tramite: seccion.querySelector<HTMLElement>('[data-pase-tramite]')!,
+    destino: seccion.querySelector<HTMLElement>('[data-pase-destino]')!,
+    modalidad: seccion.querySelector<HTMLElement>('[data-pase-modalidad]')!,
+  };
+  function pintarPase() {
+    const fd = new FormData(form);
+    const val = (k: string) => String(fd.get(k) ?? '').trim();
+    pase.nombre.textContent = val('nombre') || 'Tu nombre';
+    pase.tramite.textContent = val('tramite') || 'Por elegir';
+    pase.destino.textContent = val('destino') || 'Por elegir';
+    pase.modalidad.textContent = val('modalidad') ? (val('modalidad').startsWith('Virtual') ? 'Virtual' : 'Presencial') : 'Por elegir';
+  }
+  form.addEventListener('input', pintarPase);
+  form.addEventListener('change', pintarPase);
+
+  // ---------- Viene del explorador de rutas con el trámite elegido ----------
+  window.addEventListener('eh:prefill', (e) => {
+    const { tramite, destino } = (e as CustomEvent<{ tramite?: string; destino?: string }>).detail;
+    const sT = form.querySelector<HTMLSelectElement>('#f-tramite')!;
+    const sD = form.querySelector<HTMLSelectElement>('#f-destino')!;
+    if (tramite && [...sT.options].some((o) => o.value === tramite)) sT.value = tramite;
+    if (destino && [...sD.options].some((o) => o.value === destino)) sD.value = destino;
+    tocados.add('tramite');
+    validar('tramite');
+    pintarPase();
+  });
+
+  // ---------- Envío ----------
+  let enviando = false;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (enviando) return;
+    alerta.hidden = true;
+    const nombres = Object.keys(reglas);
+    nombres.forEach((n) => tocados.add(n));
+    const errores = nombres.filter((n) => !validar(n));
+    if (errores.length) {
+      alerta.textContent =
+        errores.length === 1 ? 'Falta corregir 1 campo. Te llevamos a él.' : `Faltan por corregir ${errores.length} campos. Te llevamos al primero.`;
+      alerta.hidden = false;
+      form.querySelector<HTMLElement>(`[data-campo="${errores[0]}"] input, [data-campo="${errores[0]}"] select`)?.focus();
+      return;
+    }
+
+    const fd = new FormData(form);
+    const datos = Object.fromEntries(fd.entries()) as Record<string, string>;
+    if (datos._honey) return; // bot
+
+    enviando = true;
+    boton.setAttribute('aria-disabled', 'true');
+    botonTexto.textContent = 'Enviando tu solicitud…';
+
+    const corte = new AbortController();
+    const reloj = window.setTimeout(() => corte.abort(), 15000);
+    try {
+      const res = await fetch(site.formulario.endpoint, {
+        method: 'POST',
+        signal: corte.signal,
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: `Nueva asesoría: ${datos.tramite} · ${datos.nombre}`,
+          _template: 'table',
+          _captcha: 'false',
+          Nombre: datos.nombre,
+          Celular: datos.celular,
+          email: datos.correo,
+          Tramite: datos.tramite,
+          Destino: datos.destino || 'Sin elegir',
+          Modalidad: datos.modalidad,
+          Mensaje: datos.mensaje || '(sin mensaje)',
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || String((json as { success?: unknown }).success) === 'false') throw new Error(res.status === 429 ? 'limite' : 'envio');
+      mostrarConfirmacion(datos);
+    } catch (err) {
+      mostrarFalloEnvio(datos, err);
+    } finally {
+      window.clearTimeout(reloj);
+      enviando = false;
+      boton.removeAttribute('aria-disabled');
+      botonTexto.textContent = textoOriginal;
+    }
+  });
+
+  // Enlace de WhatsApp con la solicitud ya escrita: sirve igual si el correo no salió
+  const enlaceWhatsapp = (d: Record<string, string>, enviado: boolean) => {
+    const caso = `${d.tramite}${d.destino ? ` (${d.destino})` : ''}`;
+    const msg = enviado
+      ? `Hola, EmigraHoy. Soy ${d.nombre.trim()}. Acabo de pedir una asesoría para ${caso}.`
+      : `Hola, EmigraHoy. Soy ${d.nombre.trim()}. Quiero agendar una asesoría ${d.modalidad.startsWith('Virtual') ? 'virtual' : 'presencial en Envigado'} para ${caso}. Mi celular es ${d.celular.trim()} y mi correo ${d.correo.trim()}.${d.mensaje ? ` ${d.mensaje.trim()}` : ''}`;
+    return `${site.whatsapp.base}?text=${encodeURIComponent(msg)}`;
+  };
+
+  function mostrarFalloEnvio(d: Record<string, string>, err: unknown) {
+    const causa =
+      err instanceof DOMException && err.name === 'AbortError'
+        ? 'El envío tardó demasiado y lo detuvimos.'
+        : err instanceof Error && err.message === 'limite'
+          ? 'Recibimos muchas solicitudes seguidas desde tu conexión.'
+          : navigator.onLine === false
+            ? 'Parece que no tienes conexión a internet.'
+            : 'No pudimos enviar tu solicitud.';
+    const wa = document.createElement('a');
+    wa.href = enlaceWhatsapp(d, false);
+    wa.target = '_blank';
+    wa.rel = 'noopener';
+    wa.textContent = 'envíala por WhatsApp con tus datos ya escritos';
+    alerta.replaceChildren(`${causa} Tus datos siguen aquí: vuelve a intentarlo en un momento o `, wa, '.');
+    alerta.hidden = false;
+  }
+
+  function mostrarConfirmacion(d: Record<string, string>) {
+    const primero = d.nombre.trim().split(/\s+/)[0];
+    confirmacion.querySelector('[data-confirmacion-titulo]')!.textContent = `Recibimos tu solicitud, ${primero}`;
+    confirmacion.querySelector('[data-confirmacion-texto]')!.textContent =
+      `Te escribimos al ${d.celular.trim()} para confirmar día y hora de tu asesoría ${d.modalidad.startsWith('Virtual') ? 'virtual' : 'en Envigado'}.`;
+    confirmacion.querySelector<HTMLAnchorElement>('[data-confirmacion-wa]')!.href = enlaceWhatsapp(d, true);
+
+    const cambiar = () => {
+      form.hidden = true;
+      confirmacion.hidden = false;
+      confirmacion.focus();
+      const s = confirmacion.querySelector<SVGElement>('[data-confirmacion-sello]')!;
+      if (conMovimiento()) {
+        animate(confirmacion, { opacity: [0, 1] }, { duration: 0.35 });
+        sellar(s, 0.2);
+      } else if (movimientoReducido()) {
+        // sin el golpe del sello: la confirmación llega con un fundido para que el cambio se note
+        animate(confirmacion, { opacity: [0, 1] }, { duration: 0.25 });
+      }
+    };
+    if (conMovimiento()) animate(form, { opacity: 0 }, { duration: 0.2 }).then(cambiar);
+    else if (movimientoReducido()) animate(form, { opacity: 0 }, { duration: 0.12 }).then(cambiar);
+    else cambiar();
+  }
+
+  seccion.querySelector('[data-form-otra]')!.addEventListener('click', () => {
+    form.reset();
+    tocados.clear();
+    form.querySelectorAll('[data-error]').forEach((e) => (e.textContent = ''));
+    form.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+    form.querySelectorAll('.valido').forEach((e) => e.classList.remove('valido'));
+    pintarPase();
+    confirmacion.hidden = true;
+    form.hidden = false;
+    form.style.opacity = '';
+    form.querySelector<HTMLInputElement>('#f-nombre')!.focus();
+  });
+
+  // ---------- Entrada: el verde invade desde la izquierda, el pase llega de lado, los campos en cascada ----------
+  if (conMovimiento()) {
+    const tinta = seccion.querySelector<HTMLElement>('[data-contacto-tinta]')!;
+    const paseEl = seccion.querySelector<HTMLElement>('[data-pase]')!;
+    const campos = form.querySelectorAll<HTMLElement>('.campo, .form-envio');
+    seccion.style.background = 'var(--color-papel)';
+    tinta.style.clipPath = 'inset(0 100% 0 0)';
+    paseEl.style.opacity = '0';
+    campos.forEach((c) => (c.style.opacity = '0'));
+    inView(
+      seccion,
+      () => {
+        animate(tinta, { clipPath: ['inset(0 100% 0 0)', 'inset(0 0% 0 0)'] }, { duration: 0.75, ease: easeSalida }).then(
+          () => (seccion.style.background = ''),
+        );
+        animate(paseEl, { opacity: [0, 1], x: [-60, 0], rotate: [-3, 0] }, { duration: 0.7, delay: 0.45, ease: easeSalida });
+        animate(campos, { opacity: [0, 1] }, { duration: 0.4, delay: stagger(tiempo('--paso-grupo') - 0.01, { startDelay: 0.5 }) });
+      },
+      { amount: 0.12 },
+    );
+  }
+</script>

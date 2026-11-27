@@ -1,0 +1,239 @@
+---
+import { site, cta } from '../../config/site';
+
+const pruebas = [
+  {
+    titulo: 'Sede física en Envigado',
+    texto: 'Te atendemos en persona en Envigado, Antioquia. Si algo no avanza, sabes dónde encontrarnos.',
+    enlace: { texto: 'Ver la sede en Google Maps', href: site.resenas.href },
+  },
+  {
+    titulo: 'Respaldo legal en cada trámite',
+    texto: 'Revisamos cada documento antes de presentarlo. No te dejamos solo llenando formularios.',
+  },
+  {
+    titulo: `${site.resenas.total} reseñas reales en Google`,
+    texto: 'Lee lo que cuentan nuestros clientes antes de decidir.',
+    enlace: { texto: `Leer las ${site.resenas.total} reseñas`, href: site.resenas.href },
+  },
+  {
+    titulo: 'También por videollamada',
+    texto: '¿Vives fuera de Antioquia o del país? Hacemos la asesoría virtual, con el mismo equipo.',
+  },
+];
+---
+
+<section id="confianza" class="confianza" data-tono="noche" aria-labelledby="confianza-titulo">
+  <div class="confianza-tinta" data-confianza-tinta aria-hidden="true"></div>
+  <div class="wrap confianza-wrap">
+    <h2 id="confianza-titulo" class="confianza-h2">
+      <span class="confianza-pre" data-confianza-entra>Nos encuentras en</span>
+      <span class="confianza-grande" data-confianza-palabra>Envigado</span>
+    </h2>
+
+    <div class="confianza-grid">
+      <div class="confianza-foto foto-pendiente" data-confianza-entra>
+        <!-- FOTO PENDIENTE: fachada de la sede de EmigraHoy en Envigado. -->
+        <strong>Foto pendiente de la sede</strong>
+        <span>
+          Fachada de la oficina en Envigado, de frente y con el letrero visible. Luz de mañana, cálida, sin flash, encuadre
+          vertical.
+        </span>
+      </div>
+
+      <ul class="confianza-pruebas" role="list">
+        {
+          pruebas.map((p) => (
+            <li data-confianza-entra>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+              {p.enlace && (
+                <a href={p.enlace.href} class="enlace" target="_blank" rel="noopener">
+                  {p.enlace.texto} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="confianza-cta" data-confianza-entra>
+      <a href={cta.href} class="btn btn-sello confianza-btn">{cta.texto}</a>
+      <p>Presencial en Envigado o virtual, como te quede mejor.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .confianza {
+    position: relative;
+    background: var(--color-noche);
+    color: var(--color-papel);
+    padding-block: calc(var(--sec-y) * 0.8) var(--sec-y);
+    min-height: 100svh;
+    overflow: hidden;
+  }
+  .confianza-tinta {
+    position: absolute;
+    inset: 0;
+    background: var(--color-noche);
+  }
+  .confianza-wrap {
+    position: relative;
+  }
+  .confianza-h2 {
+    margin: 0;
+    display: grid;
+    line-height: 0.9;
+  }
+  .confianza-pre {
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    font-style: italic;
+    color: var(--color-niebla);
+    margin-bottom: 0.25rem;
+  }
+  .confianza-grande {
+    display: block;
+    font-size: clamp(4.6rem, 21.5vw, 19.5rem);
+    font-weight: 520;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    margin-top: 0.08em;
+    margin-left: -0.05em;
+    position: relative;
+    z-index: 2;
+  }
+  .confianza-grid {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  .confianza-foto {
+    color: var(--color-niebla);
+    background: var(--color-noche-2);
+    border-color: var(--color-linea-noche);
+    min-height: 260px;
+  }
+  .confianza-foto strong {
+    color: var(--color-papel);
+    font-weight: 600;
+  }
+  .confianza-pruebas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+  .confianza-pruebas li {
+    padding: 1.35rem 0;
+    border-top: 1px solid var(--color-linea-noche);
+  }
+  .confianza-pruebas h3 {
+    margin: 0;
+    font-size: clamp(1.45rem, 2vw, 1.85rem);
+    line-height: 1.15;
+  }
+  .confianza-pruebas p {
+    margin: 0.5rem 0 0;
+    color: var(--color-niebla);
+    max-width: 42ch;
+  }
+  .confianza-pruebas .enlace {
+    margin-top: 0.25rem;
+    color: var(--color-papel);
+    justify-self: start;
+  }
+  .confianza-cta {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+  .confianza-cta p {
+    margin: 0;
+    color: var(--color-niebla);
+  }
+  .confianza-btn {
+    box-shadow: inset 0 0 0 2px rgb(251 249 244 / 0.85);
+  }
+
+  @media (max-width: 639px) {
+    .confianza-btn {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .confianza-grid {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 8fr);
+      gap: clamp(2.5rem, 6vw, 6rem);
+      margin-top: -3.2rem;
+      align-items: start;
+    }
+    .confianza-foto {
+      aspect-ratio: 4 / 5;
+      max-width: 340px;
+      min-height: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .confianza-pruebas {
+      padding-top: 5.5rem;
+    }
+    .confianza-pruebas li {
+      display: grid;
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      column-gap: 2.5rem;
+      align-items: baseline;
+    }
+    .confianza-pruebas li > :not(h3) {
+      grid-column: 2;
+    }
+    .confianza-pruebas li h3 {
+      grid-row: span 2;
+    }
+    .confianza-pruebas p {
+      margin-top: 0;
+    }
+    .confianza-cta {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      margin-left: calc((100% - clamp(2.5rem, 6vw, 6rem)) * 3 / 11 + clamp(2.5rem, 6vw, 6rem));
+    }
+  }
+</style>
+
+<script>
+  import { animate, inView, stagger } from 'motion';
+  import { conMovimiento, easeSalida, tiempo } from '../../scripts/anim';
+
+  if (conMovimiento()) {
+    const seccion = document.getElementById('confianza')!;
+    const tinta = seccion.querySelector<HTMLElement>('[data-confianza-tinta]')!;
+    const palabra = seccion.querySelector<HTMLElement>('[data-confianza-palabra]')!;
+    const entra = seccion.querySelectorAll<HTMLElement>('[data-confianza-entra]');
+
+    // El color invade: la sección arranca sobre papel y el verde noche sube y la cubre.
+    seccion.style.background = 'var(--color-papel)';
+    tinta.style.clipPath = 'inset(100% 0 0 0)';
+    palabra.style.clipPath = 'inset(-10% 100% -30% 0)';
+    entra.forEach((e) => (e.style.opacity = '0'));
+
+    inView(
+      seccion,
+      () => {
+        animate(tinta, { clipPath: ['inset(100% 0 0 0)', 'inset(0% 0 0 0)'] }, { duration: 0.7, ease: easeSalida }).then(() => {
+          seccion.style.background = '';
+        });
+        // las letras se revelan con una máscara horizontal
+        animate(palabra, { clipPath: ['inset(-10% 100% -30% 0)', 'inset(-10% 0% -30% 0)'] }, { duration: 0.9, delay: 0.35, ease: easeSalida }).then(() => (palabra.style.clipPath = 'none'));
+        animate(entra, { opacity: [0, 1] }, { duration: 0.55, delay: stagger(tiempo('--paso-grupo') + 0.02, { startDelay: 0.6 }) });
+      },
+      { amount: 0.12 },
+    );
+  }
+</script>

@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Tokens de EmigraHoy: se definen una sola vez aquí.
+   Colores del logo (verde #428F4C, rojo #BE3744) + papel de alto gramaje.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-verde: #428f4c;
+  --color-verde-texto: #2e6b37;
+  --color-rojo: #be3744;
+  --color-rojo-hondo: #a32e3a;
+  --color-papel: #fbf9f4;
+  --color-folio: #f1ece1;
+  --color-tinta: #1c2620;
+  --color-gris: #59625c;
+  --color-noche: #163020;
+  --color-noche-2: #1e3d29;
+  --color-niebla: #c3cec5;
+  --color-linea: #d9d1c0;
+  --color-linea-noche: #3d5a46;
+  --color-foco-noche: #f4c7cb;
+  --color-blanco: #ffffff;
+  /* controles de formulario sobre papel */
+  --color-campo: var(--color-blanco);
+  --color-borde-campo: #8a8f86;
+  --color-placeholder: #6b716a;
+  --color-error-fondo: #f8e6e7;
+
+  --font-display: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Schibsted Grotesk Variable", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-sello: cubic-bezier(0.3, 0.75, 0.2, 1);
+}
+
+:root {
+  /* tiempos (los lee también el JS de animación) */
+  --dur-respuesta: 200ms;
+  --dur-entrada: 700ms;
+  --paso-grupo: 70ms;
+
+  /* espacios */
+  --gutter: clamp(16px, 4.2vw, 64px);
+  --wrap: 1320px;
+  --header-h: 76px;
+  --sec-y: clamp(80px, 9vw, 136px);
+
+  /* radios: el papel casi recto, los controles algo más suaves, las fichas en píldora */
+  --r-papel: 2px;
+  --r-control: 4px;
+
+  color-scheme: light;
+}
+
+@layer base {
+  html {
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: calc(var(--header-h) + 8px);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background: var(--color-papel);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-rojo);
+    outline-offset: 3px;
+  }
+  /* El anillo claro es solo para superficies noche; una hoja de papel dentro de ellas vuelve al rojo */
+  .bg-noche :focus-visible,
+  [data-tono="noche"] :focus-visible {
+    outline-color: var(--color-foco-noche);
+  }
+  .bg-noche [data-tono="papel"] :focus-visible,
+  [data-tono="noche"] [data-tono="papel"] :focus-visible {
+    outline-color: var(--color-rojo);
+  }
+  ::selection {
+    background: var(--color-rojo);
+    color: var(--color-blanco);
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: calc(var(--wrap) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Botón principal: siempre rojo sello, siempre el mismo texto */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: 52px;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--r-control);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      transform var(--dur-respuesta) var(--ease-salida),
+      background-color var(--dur-respuesta) var(--ease-salida),
+      box-shadow var(--dur-respuesta) var(--ease-salida);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.98);
+  }
+  .btn-sello {
+    background: var(--color-rojo);
+    color: var(--color-blanco);
+    box-shadow: 0 1px 0 var(--color-rojo-hondo), 0 6px 18px -10px rgb(163 46 58 / 0.7);
+  }
+  .btn-sello:hover {
+    background: var(--color-rojo-hondo);
+  }
+  .btn-linea {
+    color: var(--color-tinta);
+    box-shadow: inset 0 0 0 1.5px var(--color-tinta);
+  }
+  .btn-linea:hover {
+    background: var(--color-tinta);
+    color: var(--color-papel);
+  }
+  .btn-linea-noche {
+    color: var(--color-papel);
+    box-shadow: inset 0 0 0 1.5px var(--color-papel);
+  }
+  .btn-linea-noche:hover {
+    background: var(--color-papel);
+    color: var(--color-noche);
+  }
+  .btn .flecha {
+    transition: transform var(--dur-respuesta) var(--ease-salida);
+  }
+  .btn:hover .flecha {
+    transform: translateX(3px);
+  }
+
+  /* Enlace con subrayado que se dibuja */
+  .enlace {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 0.4em;
+    font-weight: 600;
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1.5px;
+    background-position: 0 calc(50% + 0.75em);
+    background-repeat: no-repeat;
+    transition: background-size var(--dur-respuesta) var(--ease-salida);
+  }
+  .enlace:hover {
+    background-size: 0% 1.5px;
+    background-position: 100% calc(50% + 0.75em);
+  }
+
+  /* Franja tipo pasaporte (zona de lectura mecánica) */
+  .mrz {
+    font-family: var(--font-mono);
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Hueco de foto pendiente: describe la foto exacta que falta */
+  .foto-pendiente {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    border: 1.5px dashed currentColor;
+    border-radius: var(--r-papel);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Estados iniciales de animación: SOLO si JS y movimiento están activos
+   (html.motion). Sin JS o con movimiento reducido, todo se ve completo.
+   ------------------------------------------------------------------ */
+.motion [data-hero-fondo] {
+  clip-path: inset(0 0 100% 0);
+}
+.motion [data-hero-foto] {
+  clip-path: inset(100% 0 0 0);
+}
+.motion [data-hero-palabra] > span {
+  transform: translateY(108%);
+}
+.motion [data-hero-aparece] {
+  opacity: 0;
+}
+.motion [data-hero-boton] {
+  clip-path: inset(0 100% 0 0);
+}
+.motion [data-hero-sello] {
+  opacity: 0;
+}
+
+/* Movimiento reducido: no hay un apagado global. Cada componente quita el desplazamiento
+   y conserva los fundidos de color y opacidad que confirman un cambio de estado. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:active,
+  .btn:hover .flecha {
+    transform: none;
+  }
+}

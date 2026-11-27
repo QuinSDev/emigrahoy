@@ -1,23 +1,125 @@
+---
+import '@fontsource-variable/newsreader/wght.css';
+import '@fontsource-variable/newsreader/wght-italic.css';
+import '@fontsource-variable/schibsted-grotesk/wght.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BarraMovil from '../components/BarraMovil.astro';
+import { site } from '../config/site';
+// Precarga de las fuentes de la entrada: evita que el título cambie de líneas al llegar la fuente (CLS).
+import fuenteTitulo from '@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2?url';
+import fuenteTituloCursiva from '@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2?url';
+import fuenteTexto from '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2?url';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+const { titulo = site.titulo, descripcion = site.descripcion } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagenOg = new URL('/og.jpg', Astro.site);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'TravelAgency'],
+  name: site.nombre,
+  description: descripcion,
+  url: site.url,
+  image: imagenOg.href,
+  logo: new URL('/logo-emigrahoy.svg', Astro.site).href,
+  email: site.correo,
+  telephone: site.whatsapp.tel,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Envigado',
+    addressRegion: 'Antioquia',
+    addressCountry: 'CO',
+  },
+  hasMap: site.resenas.href,
+  sameAs: site.redes.map((r) => r.href),
+  areaServed: 'CO',
+};
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    <link rel="preload" href={fuenteTitulo} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fuenteTituloCursiva} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fuenteTexto} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#FBF9F4" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content={site.nombre} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagenOg} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EmigraHoy: Emigra con tus papeles en orden. Sede en Envigado." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagenOg} />
+
+    <script is:inline>
+      // Las entradas animadas solo se preparan si hay JS y la persona no pidió menos movimiento.
+      // Si el JS tarda más de 2,5 s, se quita el estado inicial y todo queda visible.
+      (function () {
+        var d = document.documentElement;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('motion');
+          setTimeout(function () {
+            if (!window.__ehListo) d.classList.remove('motion');
+          }, 2500);
+        }
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a href="#contenido" class="saltar">Saltar al contenido</a>
+    <Header />
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <BarraMovil />
+  </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+<style is:global>
+  .saltar {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 100;
+    padding: 0.85rem 1.25rem;
+    background: var(--color-tinta);
+    color: var(--color-papel);
+    font-weight: 600;
+    border-radius: var(--r-control);
+    text-decoration: none;
+    transform: translateY(-200%);
+  }
+  .saltar:focus {
+    transform: translateY(0);
+  }
+  main:focus {
+    outline: none;
+  }
 </style>

@@ -1,0 +1,78 @@
+---
+/**
+ * Sello de EmigraHoy: el detalle de marca que se repite.
+ * Marca algo resuelto o elegido (la sede, la ruta, cada paso, la solicitud recibida).
+ */
+interface Props {
+  id: string;
+  anillo: string;
+  centro: string[];
+  etiqueta?: string;
+  class?: string;
+  giro?: number;
+  /** papel detrás del sello, para que se lea sobre una foto */
+  relleno?: boolean;
+  [key: `data-${string}`]: unknown;
+}
+const { id, anillo, centro, etiqueta, class: clase = '', giro = -8, relleno = false, ...rest } = Astro.props;
+const pathId = `sello-ruta-${id}`;
+const lineas = centro.length;
+const alto = 22;
+const inicio = 100 - ((lineas - 1) * alto) / 2;
+---
+
+<svg
+  viewBox="0 0 200 200"
+  class:list={['sello', clase]}
+  style={`--giro:${giro}deg`}
+  role={etiqueta ? 'img' : undefined}
+  aria-label={etiqueta}
+  aria-hidden={etiqueta ? undefined : 'true'}
+  focusable="false"
+  {...rest}
+>
+  <defs>
+    <path id={pathId} d="M100,100 m-73,0 a73,73 0 1,1 146,0 a73,73 0 1,1 -146,0"></path>
+  </defs>
+  {relleno && <circle cx="100" cy="100" r="99" style="fill: var(--color-papel)" />}
+  <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="4.5"></circle>
+  <circle cx="100" cy="100" r="87" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="100" cy="100" r="58" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <text class="sello-anillo" fill="currentColor">
+    <textPath href={`#${pathId}`} startOffset="0" textLength="452" lengthAdjust="spacing">{anillo}</textPath>
+  </text>
+  {
+    centro.map((t, i) => (
+      <text
+        x="100"
+        y={inicio + i * alto}
+        text-anchor="middle"
+        dominant-baseline="central"
+        class="sello-centro"
+        fill="currentColor"
+      >
+        {t}
+      </text>
+    ))
+  }
+</svg>
+
+<style>
+  .sello {
+    color: var(--color-rojo);
+    transform: rotate(var(--giro));
+    overflow: visible;
+  }
+  .sello-anillo {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 2px;
+  }
+  .sello-centro {
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 750;
+    letter-spacing: 0.5px;
+  }
+</style>

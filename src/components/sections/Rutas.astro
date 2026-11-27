@@ -1,0 +1,583 @@
+---
+import { Picture } from 'astro:assets';
+import Sello from '../Sello.astro';
+import { destinos, objetivos, type ObjetivoId } from '../../data/rutas';
+import { cta } from '../../config/site';
+
+const inicial = destinos[0];
+const objInicial: ObjetivoId = inicial.objetivos[0];
+const ordenObjetivos = Object.keys(objetivos) as ObjetivoId[];
+
+const datos = {
+  destinos: destinos.map((d) => ({ id: d.id, nombre: d.nombre, objetivos: d.objetivos })),
+  objetivos,
+};
+
+const titulo = (o: ObjetivoId, d: string) => (o === 'ciudadania' ? objetivos[o].tramite : `${objetivos[o].tramite} · ${d}`);
+---
+
+<section id="rutas" class="rutas" aria-labelledby="rutas-titulo">
+  <div class="wrap">
+    <div class="rutas-cabeza">
+      <h2 id="rutas-titulo">Elige destino y trámite: esta es tu ruta</h2>
+      <p>
+        Hacemos ciudadanía italiana y visas de estudio, trabajo, turismo y residencia. Elige y mira qué hacemos por ti.
+      </p>
+    </div>
+
+    <div class="rutas-grid">
+      <div class="rutas-indice">
+        <p class="rutas-rotulo" id="rutas-destino">Destino</p>
+        <div role="tablist" aria-labelledby="rutas-destino" class="rutas-tabs" data-rutas-tabs>
+          {
+            destinos.map((d, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`tab-${d.id}`}
+                aria-controls="rutas-hoja"
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="rutas-tab"
+                data-destino={d.id}
+                data-rutas-entra
+              >
+                <span class="rutas-tab-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <span class="rutas-tab-nombre">{d.nombre}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <fieldset class="rutas-objetivos" data-rutas-entra>
+          <legend class="rutas-rotulo">Qué quieres hacer</legend>
+          <div class="rutas-chips">
+            {
+              ordenObjetivos.map((o) => (
+                <label class="rutas-chip" data-objetivo={o} hidden={!inicial.objetivos.includes(o)}>
+                  <input type="radio" name="objetivo" value={o} checked={o === objInicial} />
+                  <span>{objetivos[o].nombre}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+      </div>
+
+      <div id="rutas-hoja" class="rutas-hoja" role="tabpanel" aria-labelledby={`tab-${inicial.id}`} data-rutas-hoja>
+        <div class="rutas-fotos">
+          {
+            destinos.map((d, i) => (
+              <Picture
+                src={d.foto}
+                formats={['avif', 'webp']}
+                widths={[640, 960, 1400]}
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                alt={d.alt}
+                class:list={['rutas-foto', { activa: i === 0 }]}
+                data-foto={d.id}
+                aria-hidden={i === 0 ? undefined : 'true'}
+                data-source="stand-in"
+                data-subject="destino"
+              />
+            ))
+          }
+          <Sello
+            id="rutas"
+            anillo="EMIGRAHOY · RUTA REVISADA · ENVIGADO · "
+            centro={['RUTA', 'ELEGIDA']}
+            class="rutas-sello"
+            giro={7}
+            relleno
+            data-rutas-sello
+          />
+        </div>
+        <div class="rutas-detalle" data-rutas-detalle>
+          <h3 class="rutas-h3" data-rutas-titulo aria-live="polite">{titulo(objInicial, inicial.nombre)}</h3>
+          <ol class="rutas-pasos" data-rutas-pasos>
+            {objetivos[objInicial].pasos.map((p) => <li>{p}</li>)}
+          </ol>
+          <div class="rutas-acciones">
+            <a
+              href={cta.href}
+              class="btn btn-sello"
+              data-prefill
+              data-tramite={objetivos[objInicial].tramite}
+              data-destino={inicial.nombre}>{cta.texto}</a
+            >
+            <a href="#italia" class="enlace rutas-italia" data-rutas-italia>
+              Compara las tres vías italianas <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" id="rutas-datos" set:html={JSON.stringify(datos)} />
+</section>
+
+<style>
+  .rutas {
+    background: var(--color-folio);
+    padding-block: var(--sec-y);
+    min-height: 100svh;
+  }
+  .rutas-cabeza {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  .rutas-cabeza h2 {
+    margin: 0;
+    font-size: clamp(2.4rem, 5vw, 4.25rem);
+    max-width: 16ch;
+  }
+  .rutas-cabeza p {
+    margin: 0;
+    max-width: 44ch;
+    font-size: 1.125rem;
+    color: var(--color-gris);
+  }
+  .rutas-grid {
+    display: grid;
+    gap: 2rem;
+  }
+  .rutas-grid > * {
+    min-width: 0;
+  }
+  .rutas-rotulo {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-gris);
+    padding: 0;
+  }
+  .rutas-tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-bottom: 0.25rem;
+  }
+  .rutas-tab {
+    flex: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--color-linea);
+    border-radius: 999px;
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      transform var(--dur-respuesta) var(--ease-salida),
+      background-color var(--dur-respuesta) var(--ease-salida),
+      color var(--dur-respuesta) var(--ease-salida);
+  }
+  .rutas-tab-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-gris);
+  }
+  .rutas-tab-nombre {
+    font-weight: 600;
+  }
+  .rutas-tab[aria-selected='true'] {
+    background: var(--color-tinta);
+    border-color: var(--color-tinta);
+    color: var(--color-papel);
+  }
+  .rutas-tab[aria-selected='true'] .rutas-tab-num {
+    color: var(--color-niebla);
+  }
+  .rutas-objetivos {
+    border: 0;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .rutas-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .rutas-chip {
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
+  }
+  .rutas-chip[hidden] {
+    display: none;
+  }
+  .rutas-chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .rutas-chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    border-radius: var(--r-control);
+    border: 1.5px solid var(--color-tinta);
+    font-weight: 600;
+    transition:
+      background-color var(--dur-respuesta) var(--ease-salida),
+      color var(--dur-respuesta) var(--ease-salida),
+      transform var(--dur-respuesta) var(--ease-salida);
+  }
+  .rutas-chip:hover span {
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rutas-chip:hover span {
+      transform: none;
+    }
+  }
+  .rutas-chip input:checked + span {
+    background: var(--color-verde-texto);
+    border-color: var(--color-verde-texto);
+    color: var(--color-blanco);
+  }
+  /* marca de elegido: trazo dibujado (máscara SVG), del mismo grosor que el borde de la ficha */
+  .rutas-chip input:checked + span::before {
+    content: '';
+    flex: none;
+    width: 0.85em;
+    height: 0.85em;
+    margin-right: 0.45em;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8.5l3.5 3.5 7.5-8' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.5 8.5l3.5 3.5 7.5-8' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  .rutas-chip input:focus-visible + span {
+    outline: 3px solid var(--color-rojo);
+    outline-offset: 3px;
+  }
+
+  .rutas-hoja {
+    background: var(--color-papel);
+    border: 1px solid var(--color-linea);
+    border-radius: var(--r-papel);
+    overflow: hidden;
+  }
+  .rutas-fotos {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--color-linea);
+  }
+  .rutas-fotos :global(.rutas-foto) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 450ms var(--ease-salida);
+  }
+  .rutas-fotos :global(.rutas-foto.activa) {
+    opacity: 1;
+  }
+  .rutas-sello {
+    position: absolute;
+    right: 1rem;
+    bottom: -2.4rem;
+    width: 112px;
+    z-index: 2;
+    color: var(--color-rojo);
+  }
+  .rutas-detalle {
+    padding: 1.75rem 1.25rem 1.75rem;
+  }
+  .rutas-h3 {
+    margin: 0;
+    padding-right: 6rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+  }
+  .rutas-pasos {
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: paso;
+    display: grid;
+    gap: 0.9rem;
+  }
+  .rutas-pasos li {
+    counter-increment: paso;
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.5rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--color-linea);
+    line-height: 1.5;
+  }
+  .rutas-pasos li::before {
+    content: '✓';
+    font-weight: 700;
+    color: var(--color-verde-texto);
+  }
+  .rutas-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.75rem;
+  }
+  .rutas-italia {
+    color: var(--color-verde-texto);
+  }
+  .rutas-italia[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 639px) {
+    .rutas-acciones .btn {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .rutas-cabeza {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: end;
+      gap: 4rem;
+    }
+    .rutas-grid {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: clamp(2rem, 4vw, 4.5rem);
+      align-items: start;
+    }
+    .rutas-tabs {
+      flex-direction: column;
+      gap: 0;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+      border-top: 1px solid var(--color-linea);
+    }
+    .rutas-tab {
+      position: relative;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--color-linea);
+      border-radius: 0;
+      background: transparent;
+      padding: 0.85rem 0;
+      gap: 1rem;
+    }
+    .rutas-tab::before {
+      content: '';
+      position: absolute;
+      left: -1.1rem;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      margin-top: -3px;
+      background: var(--color-rojo);
+      border-radius: 50%;
+      transform: scale(0);
+      transition: transform var(--dur-respuesta) var(--ease-salida);
+    }
+    .rutas-tab-nombre {
+      font-family: var(--font-display);
+      font-weight: 450;
+      font-size: clamp(1.6rem, 2.3vw, 2.1rem);
+      line-height: 1.1;
+      transition: transform var(--dur-respuesta) var(--ease-salida);
+    }
+    .rutas-tab:hover .rutas-tab-nombre {
+      transform: translateX(6px);
+    }
+    .rutas-tab[aria-selected='true'] {
+      background: transparent;
+      color: var(--color-tinta);
+    }
+    .rutas-tab[aria-selected='true'] .rutas-tab-num {
+      color: var(--color-rojo-hondo);
+    }
+    .rutas-tab[aria-selected='true'] .rutas-tab-nombre {
+      font-style: italic;
+      color: var(--color-verde-texto);
+    }
+    .rutas-tab[aria-selected='true']::before {
+      transform: scale(1);
+    }
+    .rutas-fotos {
+      aspect-ratio: 21 / 9;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rutas-tab::before {
+        transform: none;
+        opacity: 0;
+        transition: opacity var(--dur-respuesta) var(--ease-salida);
+      }
+      .rutas-tab[aria-selected='true']::before {
+        transform: none;
+        opacity: 1;
+      }
+      .rutas-tab:hover .rutas-tab-nombre {
+        transform: none;
+      }
+    }
+    .rutas-detalle {
+      padding: 2rem 2.25rem 2.25rem;
+    }
+    .rutas-pasos {
+      gap: 0.75rem;
+      max-width: 62ch;
+    }
+    .rutas-pasos li {
+      padding-top: 0.75rem;
+    }
+    .rutas-sello {
+      width: 128px;
+      right: 2rem;
+      bottom: -2.75rem;
+    }
+  }
+</style>
+
+<script>
+  import { animate, inView, stagger } from 'motion';
+  import { conMovimiento, easeSalida, movimientoReducido, sellar, tiempo } from '../../scripts/anim';
+
+  type Obj = 'ciudadania' | 'estudio' | 'trabajo' | 'turismo' | 'residencia';
+  const datos = JSON.parse(document.getElementById('rutas-datos')!.textContent!) as {
+    destinos: { id: string; nombre: string; objetivos: Obj[] }[];
+    objetivos: Record<Obj, { nombre: string; tramite: string; pasos: string[] }>;
+  };
+
+  const seccion = document.getElementById('rutas')!;
+  const tabs = Array.from(seccion.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+  const chips = Array.from(seccion.querySelectorAll<HTMLLabelElement>('[data-objetivo]'));
+  const radios = Array.from(seccion.querySelectorAll<HTMLInputElement>('input[name="objetivo"]'));
+  const hoja = seccion.querySelector<HTMLElement>('[data-rutas-hoja]')!;
+  const detalle = seccion.querySelector<HTMLElement>('[data-rutas-detalle]')!;
+  const tituloEl = seccion.querySelector<HTMLElement>('[data-rutas-titulo]')!;
+  const pasosEl = seccion.querySelector<HTMLElement>('[data-rutas-pasos]')!;
+  const fotos = Array.from(seccion.querySelectorAll<HTMLElement>('[data-foto]'));
+  const sello = seccion.querySelector<SVGElement>('[data-rutas-sello]')!;
+  const prefill = seccion.querySelector<HTMLAnchorElement>('[data-prefill]')!;
+  const enlaceItalia = seccion.querySelector<HTMLAnchorElement>('[data-rutas-italia]')!;
+
+  let destino = datos.destinos[0];
+  let objetivo: Obj = destino.objetivos[0];
+
+  function pintar(animar = true) {
+    const o = datos.objetivos[objetivo];
+    const titulo = objetivo === 'ciudadania' ? o.tramite : `${o.tramite} · ${destino.nombre}`;
+    const aplicar = () => {
+      tituloEl.textContent = titulo;
+      pasosEl.innerHTML = '';
+      o.pasos.forEach((p) => {
+        const li = document.createElement('li');
+        li.textContent = p;
+        pasosEl.appendChild(li);
+      });
+      prefill.dataset.tramite = o.tramite;
+      prefill.dataset.destino = destino.nombre;
+      enlaceItalia.hidden = destino.id !== 'italia';
+    };
+    fotos.forEach((f) => {
+      const activa = f.dataset.foto === destino.id;
+      f.classList.toggle('activa', activa);
+      if (activa) f.removeAttribute('aria-hidden');
+      else f.setAttribute('aria-hidden', 'true');
+    });
+    if (!animar) {
+      aplicar();
+      return;
+    }
+    if (movimientoReducido()) {
+      // sin máscara ni desplazamiento: un fundido corto confirma que la hoja cambió
+      animate(detalle, { opacity: 0 }, { duration: 0.12 }).then(() => {
+        aplicar();
+        animate(detalle, { opacity: [0, 1] }, { duration: 0.2 });
+      });
+      sellar(sello, 0.1);
+      return;
+    }
+    // salida corta y entrada con máscara; si el usuario cambia rápido, la animación nueva interrumpe a la anterior
+    animate(detalle, { opacity: 0 }, { duration: tiempo('--dur-respuesta') * 0.6 }).then(() => {
+      aplicar();
+      animate(detalle, { opacity: [0, 1], clipPath: ['inset(0 0 30% 0)', 'inset(0 0 0% 0)'] }, { duration: 0.4, ease: easeSalida }).then(() => (detalle.style.clipPath = 'none'));
+      animate(pasosEl.children, { opacity: [0, 1], x: [-10, 0] }, { delay: stagger(tiempo('--paso-grupo')), duration: 0.35, ease: easeSalida });
+    });
+    sellar(sello, 0.18);
+  }
+
+  function elegirDestino(tab: HTMLButtonElement, foco = false) {
+    const nuevo = datos.destinos.find((d) => d.id === tab.dataset.destino)!;
+    if (nuevo.id === destino.id) return;
+    destino = nuevo;
+    tabs.forEach((t) => {
+      const sel = t === tab;
+      t.setAttribute('aria-selected', String(sel));
+      t.tabIndex = sel ? 0 : -1;
+    });
+    hoja.setAttribute('aria-labelledby', tab.id);
+    if (foco) tab.focus();
+    chips.forEach((c) => (c.hidden = !destino.objetivos.includes(c.dataset.objetivo as Obj)));
+    if (!destino.objetivos.includes(objetivo)) objetivo = destino.objetivos[0];
+    radios.forEach((r) => (r.checked = r.value === objetivo));
+    pintar();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => elegirDestino(tab));
+    tab.addEventListener('keydown', (e) => {
+      const teclas: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+      if (e.key in teclas) {
+        e.preventDefault();
+        elegirDestino(tabs[(i + teclas[e.key] + tabs.length) % tabs.length], true);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        elegirDestino(tabs[0], true);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        elegirDestino(tabs[tabs.length - 1], true);
+      }
+    });
+  });
+  radios.forEach((r) =>
+    r.addEventListener('change', () => {
+      if (r.checked) {
+        objetivo = r.value as Obj;
+        pintar();
+      }
+    }),
+  );
+
+  prefill.addEventListener('click', () => {
+    window.dispatchEvent(
+      new CustomEvent('eh:prefill', { detail: { tramite: prefill.dataset.tramite, destino: prefill.dataset.destino } }),
+    );
+  });
+
+  // Entrada de la sección: el índice llega de lado, la hoja se descubre desde arriba
+  if (conMovimiento()) {
+    const entra = seccion.querySelectorAll<HTMLElement>('[data-rutas-entra]');
+    entra.forEach((e) => (e.style.opacity = '0'));
+    hoja.style.clipPath = 'inset(0 0 100% 0)';
+    sello.style.opacity = '0';
+    // se observa la rejilla y no la hoja: la hoja empieza recortada y el observador no la vería
+    inView(
+      seccion.querySelector('.rutas-grid')!,
+      () => {
+        animate(entra, { opacity: [0, 1], x: [-24, 0] }, { delay: stagger(tiempo('--paso-grupo')), duration: 0.55, ease: easeSalida });
+        animate(hoja, { clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'] }, { duration: 0.85, delay: 0.1, ease: easeSalida }).then(() => (hoja.style.clipPath = 'none'));
+        sellar(sello, 0.8);
+      },
+      { amount: 0.25 },
+    );
+  }
+</script>
