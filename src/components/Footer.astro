@@ -1,5 +1,7 @@
 ---
 import { site, navegacion, cta } from '../config/site';
+import logoEmigrahoy from '../assets/logo-emigra-hoy.svg';
+
 
 const creditos = [
   { que: 'Florencia', autor: 'hozinja', lic: 'CC BY 2.0', href: 'https://commons.wikimedia.org/wiki/File:Sunset_in_Florence_from_the_Piazza_Michelangelo.jpg' },
@@ -16,7 +18,7 @@ const anio = new Date().getFullYear();
 <footer class="pie">
   <div class="wrap pie-grid">
     <div class="pie-marca">
-      <img src="/logo-emigrahoy.svg" alt="EmigraHoy" width="915" height="871" loading="lazy" class="pie-logo" />
+      <img src={logoEmigrahoy.src} alt="EmigraHoy" width="915" height="871" loading="lazy" class="pie-logo" />
       <p>Ciudadanía italiana, visas y viajes. Sede física en {site.sede}, atención presencial y virtual.</p>
       <a href={cta.href} class="btn btn-sello pie-cta">{cta.texto}</a>
     </div>

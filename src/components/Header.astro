@@ -1,12 +1,13 @@
 ---
 import { site, cta, navegacion } from '../config/site';
+import logoEmigrahoy from '../assets/logo-emigra-hoy.svg';
 ---
 
 <header class="cabecera" data-cabecera>
   <div class="cabecera-fondo" aria-hidden="true"></div>
   <div class="wrap cabecera-fila">
     <a href="#inicio" class="marca" aria-label="EmigraHoy, ir al inicio">
-      <img src={`${import.meta.env.BASE_URL}logo-emigrahoy.svg`} alt="Logo EmigraHoy" width="915" height="871" class="marca-logo" />
+      <img src={logoEmigrahoy.src} alt="Logo EmigraHoy" width="915" height="871" class="marca-logo" />
     </a>
 
     <nav aria-label="Principal" class="nav-escritorio">
